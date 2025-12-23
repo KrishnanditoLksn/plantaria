@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Cannabis",
+        "species": "Cannabis sativa",
+        "age": 3,
+        "habitat": "Home",
+        "diet": "Photosynthesis"
+    },
+    {
+        "id": 2,
+        "name": "Monstera",
+        "species": "Monstera deliciosa",
+        "age": 2,
+        "habitat": "Indoor",
+        "diet": "Photosynthesis"
+    },
+    {
+        "id": 3,
+        "name": "Venus Flytrap",
+        "species": "Dionaea muscipula",
+        "age": 1,
+        "habitat": "Swamp",
+        "diet": "Carnivorous"
+    },
+    {
+        "id": 4,
+        "name": "Cactus",
+        "species": "Cactaceae",
+        "age": 5,
+        "habitat": "Desert",
+        "diet": "Photosynthesis"
+    },
+    {
+        "id": 5,
+        "name": "Aloe Vera",
+        "species": "Aloe barbadensis",
+        "age": 4,
+        "habitat": "Garden",
+        "diet": "Photosynthesis"
+    }
+]
