@@ -9,16 +9,16 @@ app = FastAPI(
 
 class Plant(BaseModel):
     name:str = Field(
-        min_length=2,description="Plant Name"
+        description="Plant Name"
     )
     species:str=Field(
-        min_length=2,description="Plant Species"
+        description="Plant Species"
     )
     age:int = Field(
-        min_length=2,description="Plant Age"
+        description="Plant Age"
     )
     habitat:str=Field(
-        min_length=2,description="Habitat Plant"
+        description="Habitat Plant"
     )
 
 
@@ -28,4 +28,3 @@ class UpdatePlant(BaseModel):
     age: Optional[int] = Field(None, description="Plant age")
     habitat: Optional[str] = Field(None, description="Plant habitat")
     diet: Optional[str] = Field(None, description="Plant diet")
-
