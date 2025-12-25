@@ -35,4 +35,4 @@ def get_plant_by_id(id:int)->Plant:
         if i["id"] == id:
             return Plant(**i)
     
-    raise HTTPException(status_code=404, detail={"error": "Animal not found"})
+    raise HTTPException(status_code=404, detail={"error": "Plant not found"})
