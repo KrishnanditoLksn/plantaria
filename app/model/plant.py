@@ -21,9 +21,9 @@ class Plant(Base):
         autoincrement=True
     )
     
-    species : Mapped[str] = mapped_column(
+    species =  Column(
         String(50), 
-        unique=True
+        unique=True,
     )
     
     age = Column(
@@ -35,10 +35,3 @@ class Plant(Base):
         Integer,
         index=True
     )
-
-# class UpdatePlant(BaseModel):
-#     name: Optional[str] = Field(None, description="Plant name")
-#     species: Optional[str] = Field(None, description="Plant species")
-#     age: Optional[int] = Field(None, description="Plant age")
-#     habitat: Optional[str] = Field(None, description="Plant habitat")
-#     diet: Optional[str] = Field(None, description="Plant diet")
