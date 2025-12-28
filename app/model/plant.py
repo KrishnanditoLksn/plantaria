@@ -4,7 +4,7 @@ from fastapi import Body,FastAPI,HTTPException,Query
 from pydantic import BaseModel,Field
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Column, Integer, String
-from app.database import Base
+from app.db.database import Base
 
 app = FastAPI(
     title="Plants API", 
