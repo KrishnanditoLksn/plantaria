@@ -1,11 +1,18 @@
 import json
-from typing import Union
+import traceback
+from typing import Annotated, List, Optional, Union
 import dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
+from pydantic import BaseModel
+from sqlalchemy import exists, select
+from sqlalchemy.orm import Session
+
 
 from app.database import Base, SessionLocal,engine
 from app.model import plant
 from app.model.plant import Plant
+from app.request.plant_post_request import PlantRequest
+from app.response.plant_detail_response import PlantResponse
 
 app = FastAPI(
     title="Plants API", 
@@ -33,22 +40,79 @@ def read_root():
         "Hello":"World"
     }
 
-# @app.get("/plants",response_model=list[Plant],summary="Get All Plants",status_code=201)
-# async def get_all_plants()->list[Plant]:
-    
-#     with open("../app/plant_db.json","r") as file:
-#         plant = json.load(file)
-#     result = plant
-#     return result
 
-# @app.get("/plant/{id}" , response_model=Plant , summary="Get Plant by Id")
-# def get_plant_by_id(id:int)->Plant:
-        
-#     with open("../app/plant_db.json","r") as file:
-#         plant = json.load(file)
-        
-#     for i in plant:
-#         if i["id"] == id:
-#             return Plant(**i)
+@app.get("/plants",response_model=List[PlantResponse],status_code=201)
+async def get_all_plants(session:Session = Depends(get_db)):
     
-#     raise HTTPException(status_code=404, detail={"error": "Plant not found"})
+    try:
+        plant = session.query(Plant).all()
+        return plant
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "status": "error",
+                "error_type": type(e).__name__,
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            }
+        )
+
+
+@app.post("/plant/create")
+def post_plant(plant:PlantRequest,db:Session = Depends(get_db)):
+    try:
+        is_present = db.scalars(select(exists().where(Plant.age == plant.age))).one()
+        
+        if is_present:
+            return {
+                "status":"error",
+                "message":"Plant Already Exists"
+            }
+        else:
+            plant = Plant(
+                species = plant.species,
+                age = plant.age,
+                habitat = plant.habitat
+            )
+            db.add(plant)
+            db.commit()
+            return {
+                "status":"success",
+                "data":plant
+            }
+    except Exception as e :
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "status": "error",
+                "error_type": type(e).__name__,
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            }
+        )
+
+
+@app.get("/plant/{id}")
+def get_plant_by_id(id:int , db:Session = Depends(get_db)):
+    try:
+        findPlant = db.get(Plant,id)
+        
+        if not findPlant:
+            raise HTTPException(
+                status_code=404, 
+                detail="Plant not found"
+            )
+        return findPlant
+        
+    except Exception as e:
+        raise HTTPException(
+                status_code=404,
+                detail={
+                    "status": "error",
+                    "error_type": type(e).__name__,
+                    "message": str(e),
+                    "traceback": traceback.format_exc()
+                    }
+        )
