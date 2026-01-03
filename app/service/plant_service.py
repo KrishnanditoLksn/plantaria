@@ -14,3 +14,12 @@ def add_plant(plant:PlantRequest,db:Session = Depends(get_db)):
             )
     db.add(plant)
     db.commit()
+
+def get_plant_id(id:int , db:Session = Depends(get_db)):
+    db.get(
+        Plant,
+        id
+    )
+
+def get_plants(db:Session = Depends(get_db)):
+    db.query(Plant).all()
