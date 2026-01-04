@@ -26,62 +26,12 @@ dotenv.load_dotenv()
 Base.metadata.create_all(engine)
 
 
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-
 @app.get("/")
 def read_root():
     return {
         "Hello":"World"
     }
-
-
-@app.get("/plants",response_model=List[PlantResponse],status_code=201)
-def get_all_plants(session:Session = Depends(get_db)):
     
-    try:
-        plant = session.query(Plant).all()
-        return plant
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "status": "error",
-                "error_type": type(e).__name__,
-                "message": str(e),
-                "traceback": traceback.format_exc()
-            }
-        )
-
 app.include_router(
-    plant_api.router , prefix="/api/v1/plant"
+    plant_api.router
 )
-
-@app.get("/plant/{id}")
-def get_plant_by_id(id:int , db:Session = Depends(get_db)):
-    try:
-        findPlant = db.get(Plant,id)
-        
-        if not findPlant:
-            raise HTTPException(
-                status_code=404, 
-                detail="Plant not found"
-            )
-        return findPlant
-        
-    except Exception as e:
-        raise HTTPException(
-                status_code=404,
-                detail={
-                    "status": "error",
-                    "error_type": type(e).__name__,
-                    "message": str(e),
-                    "traceback": traceback.format_exc()
-                    }
-        )
