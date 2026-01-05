@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlmodel import Session
+from sqlmodel import Session , select
 
 from app.model.plant import Plant
 from app.schemas.request.plant_post_request import PlantRequest
@@ -16,10 +16,13 @@ def add_plant(plant:PlantRequest,db:Session = Depends(get_db)):
     db.commit()
 
 def get_plant_id(id:int , db:Session = Depends(get_db)):
-    db.get(
+    return db.get(
         Plant,
         id
     )
 
-def get_plants(db:Session = Depends(get_db)):
-    db.query(Plant).all()
+def get_all_plants(db: Session):
+    stmt = select(Plant)
+    return db.scalars(
+        stmt
+    ).all()
