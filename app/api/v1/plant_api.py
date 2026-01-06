@@ -6,6 +6,7 @@ from sqlmodel import Session
 from app.model.plant import Plant
 from app.schemas.request.plant_post_request import PlantRequest
 from app.db.database import get_db
+from app.schemas.response.plant_post_response import PlantResponse
 from app.service.plant_service import add_plant, get_all_plants, get_plant_id
 
 
@@ -64,7 +65,7 @@ def get_plant_by_id(id:int , db:Session = Depends(get_db)):
                 }
         )
 
-@router.get("/plants",response_model=list[PlantRequest])
+@router.get("/plants",response_model=list[PlantResponse])
 def get_plants(db:Session = Depends(get_db)):
     try:
         all_plants = get_all_plants(db)
