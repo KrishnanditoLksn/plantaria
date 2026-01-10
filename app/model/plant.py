@@ -35,3 +35,8 @@ class Plant(Base):
         Integer,
         index=True
     )
+    
+    race = Column(
+        String,
+        Index=True
+    )
